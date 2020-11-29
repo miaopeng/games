@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #info {
+      font-size: 30px;
+      text-align: center;
+      padding: 24px;
+      height: 40px;
+    }
+
+    #npc,
+    #player {
+      margin: 0 auto;
+      width: 300px;
+      height: 300px;
+      border: 1px solid #999;
+    }
+
+    #btns {
+      text-align: center;
+    }
+
+    .action {
+      padding: 8px 16px;
+      font-size: 18px;
+      margin-top: 24px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="npc">
+    <img src="npc_idle.jpg"
+      width="100%"
+      alt="">
+  </div>
+  <div id="info">
+  </div>
+  <div id="player">
+    <img src="player_idle.jpg"
+      width="100%"
+      alt="">
+  </div>
+
+  <div id="btns">
+    <button class="action"
+      onclick="javascript:play(ROCK)">锤子</button>
+    <button class="action"
+      onclick="javascript:play(SCISSOR)">剪子</button>
+    <button class="action"
+      onclick="javascript:play(PAPER)">布</button>
+  </div>
+  <audio src="start.m4a"
+    id="start"></audio>
+</body>
+
+<script>
+  const PAPER = 0;
+  const SCISSOR = 1;
+  const ROCK = 2;
+  const $ = (s) => document.querySelector(s);
+
+  let count = 3;
+  let timer;
+  let playing = false;
+
+  const action_names = ['paper', 'scissor', 'rock'];
+
+  function reset() {
+    $('#player>img').src = `player_idle.jpg`;
+    $('#npc>img').src = `npc_idle.jpg`;
+  }
+  function play(name) {
+    if (playing) {
+      return;
+    }
+
+    playing = true;
+    reset();
+
+    let sound = $('#start');
+    sound.play();
+
+    $("#info").innerHTML = count;
+    timer = setInterval(() => {
+      if (count === 1) {
+        count = 3;
+        clearInterval(timer);
+        play_start(name);
+        playing = false;
+        return;
+      }
+      $("#info").innerHTML = --count;
+    }, 1000);
+  }
+
+  function play_start(player_action) {
+    player_play(player_action);
+
+    const npc_action = Math.floor(Math.random() * action_names.length);
+    npc_play(npc_action);
+
+    let result = player_action - npc_action;
+    if (result > 1 || result < -1) result *= -1;
+
+    $("#info").innerHTML = result === 0 ? "平局" : result > 0 ? '你赢了' : '你输了';
+  }
+
+  function player_play(text) {
+    $('#player>img').src = `player_${action_names[text]}.jpg`;
+  }
+  function npc_play(text) {
+    $('#npc>img').src = `npc_${action_names[text]}.jpg`;
+  }
+</script>
+
+</html>

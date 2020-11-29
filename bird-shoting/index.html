@@ -2,301 +2,277 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-    <style>
-        body {
-            background: url(bg-no-bird.jpg);
-        }
-        
-        .bird {
-            background: url(bird.png) no-repeat;
-            width: 50px;
-            height: 78px;
-            position: absolute;
-            top: 0;
-            left: 800px;
-        }
-        
-        .professor {
-            display: block;
-            margin: 100px auto;
-            width: 10px;
-            height: 400px;
-            opacity: 0;
-            transition: all .5s ease-out;
-        }
-        
-        .big {
-            opacity: 1;
-            width: 300px;
-            height: 600px;
-        }
-        
-        .dd {
-            position: absolute;
-            left: 50px;
-            top: 50px;
-        }
-        
-        .btn {
-            padding: 5px 10px;
-            font-size: 16px;
-        }
-        
-        .tools {
-            position: absolute;
-            top: 20px;
-            z-index: 1;
-        }
-        
-        .bullet {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background-color: black;
-            border-radius: 100%;
-        }
-        
-        .die {
-            transform: rotate(45deg);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="shortcut icon"
+    href="bird.png"
+    type="image/x-icon">
+  <style>
+    body {
+      background: url(bg-no-bird.jpg);
+    }
+
+    .bird {
+      background: url(bird.png) no-repeat;
+      width: 50px;
+      height: 78px;
+      position: absolute;
+      top: 0;
+      left: 800px;
+    }
+
+    .professor {
+      display: block;
+      margin: 100px auto;
+      width: 10px;
+      height: 400px;
+      opacity: 0;
+      transition: all .5s ease-out;
+    }
+
+    .big {
+      opacity: 1;
+      width: 300px;
+      height: 600px;
+    }
+
+    .dd {
+      position: absolute;
+      left: 50px;
+      top: 50px;
+    }
+
+    .btn {
+      padding: 5px 10px;
+      font-size: 16px;
+    }
+
+    .tools {
+      position: absolute;
+      top: 20px;
+      z-index: 1;
+    }
+
+    .bullet {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background-color: black;
+      border-radius: 100%;
+    }
+
+    .die {
+      transform: rotate(45deg);
+    }
+
+  </style>
 </head>
 
 <body>
-    <div class="tools">
-        <button class="btn btn-fat" onclick="getFat();">fat</button>
-        <button class="btn btn-thin" onclick="getThin();">thin</button>
-        <button class="btn" onclick="getHigh();">higher</button>
-        <button class="btn" onclick="getLow();">lower</button>
+  <div class="tools">
+    <p>
+      <button class="btn"
+        onclick="start()">Start</button>
+      <button class="btn"
+        onclick="stopAll = true;">Stop</button>
+    </p>
+    <p>
+      <button class="btn"
+        onclick="moreBirds()">更多的鸟</button>
+    </p>
+  </div>
 
-        <p>
-            <button class="btn" onclick="stopAll = false;">Start</button>
-            <button class="btn" onclick="stopAll = true;">Stop</button>
-        </p>
-        <p>
-            <button class="btn" onclick="moreBirds()">更多的鸟</button>
-        </p>
-    </div>
+  <img src="professor.png"
+    class="professor"
+    width="10px"
+    style="user-select: none">
 
+  <audio src="jijizhazha.m4a"
+    id="jijizhazha"
+    loop='true'></audio>
+  <audio src="die1.m4a"
+    id="die1"></audio>
+  <audio src="die2.m4a"
+    id="die2"></audio>
+  <audio src="die3.m4a"
+    id="die3"></audio>
+  <audio src="shot2.m4a"
+    id="shot"></audio>
+  <script>
+    setTimeout(function () {
+      var professor = document.getElementsByClassName('professor')[0];
+      professor.classList.add('big');
+    }, 500);
 
-    <img src="professor.png" class="professor" width="10px" style="user-select: none">
+    var liveBirds = [];
+    var stopAll = false;
 
-    <audio src="p.mp4" id="oh"></audio>
-    <audio src="deng.m4a" id="deng"></audio>
-    <audio src="jijizhazha.m4a" id="jijizhazha" loop='true'></audio>
-    <audio src="die1.m4a" id="die1"></audio>
-    <audio src="die2.m4a" id="die2"></audio>
-    <audio src="die3.m4a" id="die3"></audio>
-    <script>
-        setTimeout(function () {
-            var professor = document.getElementsByClassName('professor')[0];
-            professor.classList.add('big');
+    function start() {
+      if (stopAll) {
+        stopAll = false;
+        return;
+      }
 
-        }, 500);
+      var bird1 = new Bird(100);
+      var bird2 = new Bird(50);
+      var bird3 = new Bird(60);
+      var bird4 = new Bird(70);
+      var bird5 = new Bird(80);
+      var bird6 = new Bird(55);
+      var bird7 = new Bird(45);
+      var bird8 = new Bird(30);
+    }
 
-        var liveBirds = [];
-        var p = document.getElementsByClassName('professor')[0];
-        var oh = document.getElementById('oh');
-        var pWidth = 300;
-        var pHeight = 500;
+    function Bird(top) {
+      this.left = 2000;
+      this.top = top || 0;
+      this.speed = top;
+      this.draw();
+      this.fly(this.speed);
+    }
 
-        function getFat() {
-            pWidth += 100;
-            p.style.width = pWidth + 'px';
-            oh.play();
+    Bird.prototype.draw = function () {
+      this.el = document.createElement('div');
+      this.el.className = 'bird';
+      this.el.style.left = this.left + 'px';
+      this.el.style.top = this.top + 'px';
+      document.body.appendChild(this.el);
+      liveBirds.push(this);
+    }
+
+    Bird.prototype.fly = function (fps) {
+      var el = this.el;
+      var that = this;
+
+      function doFly() {
+        //console.log(that.left);
+        if (stopAll) {
+          that.stopSing();
+          return;
+        } else {
+          that.sing();
         }
-
-        function getThin() {
-            pWidth -= 100;
-            p.style.width = pWidth + 'px';
-            oh.play();
+        that.left -= 1;
+        if (that.left < -100) {
+          that.left = 2000;
         }
+        el.style.left = that.left + 'px';
 
-        function getHigh() {
-            deng.play();
-            pHeight += 100;
-            p.style.height = pHeight + 'px';
+      }
+      this.flyTimer = setInterval(doFly, 1000 / fps);
+    }
+
+    Bird.prototype.stopFly = function () {
+      clearInterval(this.flyTimer);
+      this.flyTimer = null;
+    }
+
+    Bird.prototype.sing = function () {
+      var jijizhazha = document.getElementById('jijizhazha');
+      jijizhazha.play();
+    }
+    Bird.prototype.stopSing = function () {
+      var jijizhazha = document.getElementById('jijizhazha');
+      jijizhazha.pause();
+    }
+    Bird.prototype.die = function () {
+      console.log('this.speed', this.speed);
+      this.stopFly();
+      this.stopSing();
+      this.el.classList.add('die');
+      var rand = Math.ceil(Math.random() * 3);
+      var dieSound = document.getElementById('die' + rand);
+      dieSound.play();
+
+      var opacity = 1;
+      var timer = setInterval(() => {
+        this.top += 20;
+        opacity -= .1;
+        this.el.style.top = this.top + 'px';
+        this.el.style.opacity = opacity;
+        if (opacity <= 0) {
+          document.body.removeChild(this.el);
+          clearInterval(timer);
+          timer = null;
         }
+      }, 1000 / 30);
+    }
 
-        function getLow() {
-            deng.play();
-            pHeight -= 100;
-            p.style.height = pHeight + 'px';
-
-        }
-
-        function createBirds() {
-            var birds = document.getElementsByClassName('bird');
-
-        }
-
-        var stopAll = false;
-
-        function Bird(top) {
-            this.left = 2000;
-            this.top = top || 0;
-            this.draw();
-        }
-
-        Bird.prototype.draw = function () {
-            this.el = document.createElement('div');
-            this.el.className = 'bird';
-            this.el.style.left = this.left + 'px';
-            this.el.style.top = this.top + 'px';
-            document.body.appendChild(this.el);
-            liveBirds.push(this);
-        }
-        Bird.prototype.fly = function (fps) {
-            var el = this.el;
-            var that = this;
-
-            function doFly() {
-                //console.log(that.left);
-                if (stopAll) {
-                    that.stopSing();
-                    return;
-                } else {
-                    that.sing();
-                }
-                that.left -= 1;
-                if (that.left < -100) {
-                    that.left = 2000;
-                }
-                el.style.left = that.left + 'px';
-
-            }
-            this.flyTimer = setInterval(doFly, 1000 / fps);
-        }
-
-        Bird.prototype.stopFly = function () {
-            clearInterval(this.flyTimer);
-            this.flyTimer = null;
-        }
-
-        Bird.prototype.sing = function () {
-            var jijizhazha = document.getElementById('jijizhazha');
-            jijizhazha.play();
-        }
-        Bird.prototype.stopSing = function () {
-            var jijizhazha = document.getElementById('jijizhazha');
-            jijizhazha.pause();
-        }
-        Bird.prototype.die = function () {
-            this.stopFly();
-            this.stopSing();
-            this.el.classList.add('die');
-            var rand = Math.ceil(Math.random() * 3);
-            var dieSound = document.getElementById('die' + rand);
-            dieSound.play();
-            var self = this;
-            var opacity = 1;
-            var timer = setInterval(function () {
-                console.log(self.top);
-                self.top += 20;
-                opacity -= .1;
-                self.el.style.top = self.top + 'px';
-                self.el.style.opacity = opacity;
-                if (opacity <= 0 || self.top >= 2000) {
-                    document.body.removeChild(self.el);
-                    clearInterval(timer);
-                    timer = null;
-                }
-            }, 1000 / 30);
-        }
-        var bird1 = new Bird();
-        bird1.fly(60);
-        var bird2 = new Bird(50);
-        bird2.fly(50);
-        var bird3 = new Bird(60);
-        bird3.fly(60);
-        var bird4 = new Bird(70);
-        bird4.fly(70);
-        var bird5 = new Bird(80);
-        bird5.fly(80);
-        var bird6 = new Bird(55);
-        bird6.fly(55);
-        var bird7 = new Bird(45);
-        bird7.fly(45);
-        var bird8 = new Bird(10);
-        bird8.fly(10);
-        
-        function moreBirds() {
-            var count = Math.ceil(Math.random() * 10) + 3;
-            var bird;
-            for(var i = 0; i < count; i++) {
-                var speed = Math.ceil(Math.random()*10) * 10 
-                bird = new Bird(speed);
-                bird.fly(speed);
-            }
-        }
+    function moreBirds() {
+      var count = Math.ceil(Math.random() * 10) + 3;
+      var bird;
+      for (var i = 0; i < count; i++) {
+        var speed = Math.ceil(Math.random() * 10) * 20
+        bird = new Bird(speed);
+      }
+    }
 
 
-        function Gun() {
-            this.init();
-        }
+    function Gun() {
+      this.init();
+      this.shotSound = document.getElementById('shot');
+    }
 
-        Gun.prototype = {
-            init: function () {},
-            shot: function (evt) {
-                console.log(evt);
-                var bullet = new Bullet(evt.x, evt.y);
-            }
-        }
+    Gun.prototype = {
+      init: function () {
+        window.addEventListener('click', this.shot.bind(this));
+      },
+      shot: function (evt) {
+        new Bullet(evt.x, evt.y);
+        this.shotSound.play();
+      }
+    }
 
-        function Bullet(x, y) {
-            this.x = x || 400;
-            this.y = y || 400;
-            this.init();
-            this.fly();
-        }
+    function Bullet(x, y) {
+      this.x = x || 400;
+      this.y = y || 400;
+      this.init();
+      this.fly();
+    }
 
-        Bullet.prototype = {
-            init: function () {
-                var bullet = document.createElement('div');
-                bullet.classList.add('bullet');
-                bullet.style.left = this.x + 'px';
-                bullet.style.top = this.y + 'px';
-                document.body.appendChild(bullet);
-                this.el = bullet;
-            },
-            fly: function () {
-                var self = this;
-                this.timer = setInterval(function () {
-                    self.y -= 10;
-                    if (self.y < 0) {
-                        self.destroy();
-                    } else {
-                        self.update();
-                    }
+    Bullet.prototype = {
+      init: function () {
+        var bullet = document.createElement('div');
+        bullet.classList.add('bullet');
+        bullet.style.left = this.x + 'px';
+        bullet.style.top = this.y + 'px';
+        document.body.appendChild(bullet);
+        this.el = bullet;
+      },
+      fly: function () {
+        this.timer = setInterval(() => {
+          this.y -= 10;
+          if (this.y < 0) {
+            this.destroy();
+          } else {
+            this.update();
+          }
 
-                }, 1000 / 60);
-            },
-            update: function () {
-                this.el.style.left = this.x + 'px';
-                this.el.style.top = this.y + 'px';
-                liveBirds.forEach(function (bird, index) {
-                    if (this.x > bird.left && this.x < bird.left + 50 &&
-                        this.y > bird.top && this.y < bird.top + 78) {
-                        //console.log('bingo!!');
-                        bird.die();
-                        liveBirds.splice(index, 1);
-                        this.destroy();
-                    }
-                }, this);
-            },
+        }, 1000 / 60);
+      },
+      update: function () {
+        this.el.style.left = this.x + 'px';
+        this.el.style.top = this.y + 'px';
+        liveBirds.forEach((bird, index) => {
+          if (this.x > bird.left && this.x < bird.left + 50 &&
+            this.y > bird.top && this.y < bird.top + 78) {
+            //console.log('bingo!!');
+            bird.die();
+            liveBirds.splice(index, 1);
+            this.destroy();
+          }
+        }, this);
+      },
 
-            destroy: function () {
-                clearInterval(this.timer);
-                this.timer = null;
-                document.body.removeChild(this.el);
-            }
-        }
+      destroy: function () {
+        clearInterval(this.timer);
+        this.timer = null;
+        document.body.removeChild(this.el);
+      }
+    }
 
-        var gun = new Gun();
-        window.addEventListener('click', gun.shot);
-    </script>
+    var gun = new Gun();
+  </script>
 </body>
 
 </html>
